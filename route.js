@@ -1,11 +1,15 @@
 
 var requestHandlers = require("./requestHandlers")
+var gds = require("./gds")
 var handle = {}
 
 // 函数绑定逻辑
 handle["/"] = requestHandlers.mainpage;
 handle["/start"] = requestHandlers.mainpage;
 handle["/upload"] = requestHandlers.upload;
+
+// GDS服务
+handle["/gds/internal/getTPositionList.json"] = gds.getTPositionList;
 
 
 function route(pathname, response, postData) {
