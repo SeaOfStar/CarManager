@@ -22,11 +22,6 @@ function start(response, postData) {
 	response.write(body);
 	response.end();
 	
-// 	exec("ls -lah", function(error, stdout, stderr) {	
-// 		response.writeHead(200, {"Content-Type": "text/plain"});
-// 		response.write("2016 Happy New Year! have a good luck!\n" + stdout);
-// 		response.end();
-// 	});
 }
 
 function upload(response, postData) {

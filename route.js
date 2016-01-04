@@ -10,6 +10,7 @@ handle["/upload"] = requestHandlers.upload;
 
 // GDS服务
 handle["/gds/internal/getTPositionList.json"] = gds.getTPositionList;
+handle["/gds/internal/getReminderRecord.json"] = gds.getReminderRecord;
 
 
 function route(pathname, response, postData) {
