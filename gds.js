@@ -74,11 +74,40 @@ function reminderRecords(postData, db, callback) {
 		var cursor = db.collection('police_mark').find({"gps_id": targetID}).sort({"bzDateTime" : 1});
 	cursor.each( function(err, doc) {
 		if (doc != null) {
-			warnings.push(doc)
+			warnings.push(warningParser(doc));
 		} else {
 			callback();
 		}
 	});
+}
+
+// key变换成接口定义的key
+function warningParser(doc) {
+
+// {"_id":"567bbcc6e4b08db89edd7f25",
+// "gps_id":"90214415182144735527",
+// "bzDateTime":"2015-12-24T09:35:03.000Z",
+// "digit":12,
+// "dLongitudeDegree":121.47866666666667,
+// "dLatitudeDegree":38.853231666666666}
+
+	var data = {};
+	data['gps_id'] = doc['gps_id'];
+	data['latitude'] = doc['dLatitudeDegree'];
+	data['longitude'] = doc['dLongitudeDegree'];
+// 	data['time'] = doc['bzDateTime'].getTime());
+	data['time'] = doc['bzDateTime'];
+	
+	var warningType = doc['digit'];
+	var typeString = '未知错误';
+	if (warningType != null) {
+		if (warningType == 12) {
+			typeString = '震动报警';
+		}
+	}
+	data['warningDetail'] = typeString;
+	
+	return data;
 }
 
 //////////////////////////////////
