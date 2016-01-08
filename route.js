@@ -8,9 +8,14 @@ handle["/"] = requestHandlers.mainpage;
 handle["/start"] = requestHandlers.mainpage;
 handle["/upload"] = requestHandlers.upload;
 
+
+/////////////
 // GDS服务
-handle["/gds/internal/getTPositionList.json"] = gds.getTPositionList;
-handle["/gds/internal/getReminderRecord.json"] = gds.getReminderRecord;
+/////////////
+handle["/gds/internal/getTPositionList.json"] = gds.getTPositionList;				// 即时位置
+handle["/gds/internal/getReminderRecord.json"] = gds.getReminderRecord;				// 提醒记录
+handle["/gds/internal/getCarStatus.json"] = gds.getCarStatus;						// 车况体检
+handle["/gds/internal/getTravel.json"] = gds.getTravel;								// 行程记录
 
 
 function route(pathname, response, postData) {

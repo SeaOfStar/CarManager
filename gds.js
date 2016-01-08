@@ -4,7 +4,7 @@ var querystring = require("querystring");
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
-var url = 'mongodb://localhost:27017/postgres';
+var databaseConnectionURL = 'mongodb://localhost:27017/postgres';
 
 var targetID = "90214415182144735527"
 // var targetID = "14"
@@ -30,9 +30,9 @@ var last = null
 function getTPositionList(response, postData) {
 	console.log("取得当前位置信息");
 	
-	MongoClient.connect(url, function(err, db) {
+	MongoClient.connect(databaseConnectionURL, function(err, db) {
 		assert.equal(null, err);
-		console.log("成功连接：" + url);
+		console.log("成功连接：" + databaseConnectionURL);
 		
 		caredPosition(db, function() {
 			writeResponse(response, last);
@@ -59,7 +59,7 @@ var caredPosition = function(db, callback) {
 //////////////////////////////////
 var warnings = new Array();
 function getReminderRecord(response, postData) {
-	MongoClient.connect(url, function(err, db) {
+	MongoClient.connect(databaseConnectionURL, function(err, db) {
 		assert.equal(null, err);
 
 		reminderRecords(postData, db, function() {
@@ -111,7 +111,39 @@ function warningParser(doc) {
 }
 
 //////////////////////////////////
+// 车况信息
+//////////////////////////////////
+function getCarStatus(response, postData) {
+		MongoClient.connect(databaseConnectionURL, function(err, db) {
+		assert.equal(null, err);
+
+		reminderRecords(postData, db, function() {
+			writeResponse(response, warnings);
+			warnings = new Array();
+			db.close();
+		});
+	});
+}
+
+//////////////////////////////////
+// 取得行程记录
+//////////////////////////////////
+function getTravel(response, postData) {
+		MongoClient.connect(databaseConnectionURL, function(err, db) {
+		assert.equal(null, err);
+
+		reminderRecords(postData, db, function() {
+			writeResponse(response, warnings);
+			warnings = new Array();
+			db.close();
+		});
+	});
+}
+
+//////////////////////////////////
 // 导出函数
 //////////////////////////////////
 exports.getTPositionList = getTPositionList;
 exports.getReminderRecord = getReminderRecord;
+exports.getCarStatus = getCarStatus;
+exports.getTravel = getTravel;
