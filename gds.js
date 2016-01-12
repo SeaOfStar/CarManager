@@ -6,8 +6,8 @@ var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 var databaseConnectionURL = 'mongodb://localhost:27017/postgres';
 
-var targetID = "90214415182144735527"
-// var targetID = "14"
+// var targetID = "90214415182144735527"
+var targetID = "test66"
 
 //////////////////////////////////
 // 共通用的回调数据处理
@@ -71,7 +71,7 @@ function getReminderRecord(response, postData) {
 }
 
 function reminderRecords(postData, db, callback) {
-		var cursor = db.collection('police_mark').find({"gps_id": targetID}).sort({"bzDateTime" : 1});
+	var cursor = db.collection('police_mark').find({"gps_id": targetID}).sort({"bzDateTime" : 1});
 	cursor.each( function(err, doc) {
 		if (doc != null) {
 			warnings.push(warningParser(doc));
@@ -117,13 +117,54 @@ function getCarStatus(response, postData) {
 		MongoClient.connect(databaseConnectionURL, function(err, db) {
 		assert.equal(null, err);
 
-		reminderRecords(postData, db, function() {
-			writeResponse(response, warnings);
-			warnings = new Array();
+		/**
+			1.检索出所有跟该GPS相关的状态信息
+			2.统计整体数据
+			3.反馈整体数据和最新数据
+		*/
+		
+// 		var allStatus = {};
+// 		allStatus['count'] = 0;
+// 		allStatus['里程'] = 0.0;
+// 		allStatus['油耗'] = 0.0;		
+// 		allStatus['最高水温'] = 0.0;
+// 		allStatus['最低水温'] = 0.0;
+// 		allStatus['最高电压'] = 0.0;
+// 		allStatus['最低电压'] = 0.0;
+// 		allStatus['最高转速'] = 0.0;
+// 		allStatus['最高速度'] = 0.0;	
+
+		var statusArray =  new Array();
+		var lastStatus = null;
+		
+		fetchStatus(postData, db, statusArray, lastStatus, function() {
+			// 创建返回数据
+			var root = {};
+			root['all'] = statusArray;
+			
+			
+			writeResponse(response, root);
 			db.close();
 		});
+
 	});
 }
+
+function fetchStatus(postData, db, list, lastStatus, callback) {
+	var cursor = db.collection('OBDInfo').find({"gps_id": targetID}).sort({"reportTime" : 1});
+	cursor.each( function(err, doc) {
+		if (doc != null) {
+		
+			list.push(doc);
+			lastStatus = doc;
+
+		} else {
+			callback();
+		}
+	});
+}
+
+
 
 //////////////////////////////////
 // 取得行程记录
