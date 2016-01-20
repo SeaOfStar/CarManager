@@ -27,7 +27,7 @@ function writeResponse(response, data) {
 // 取得当前车辆位置信息
 //////////////////////////////////
 var last = null
-function getTPositionList(response, postData) {
+function getLocation(response, postData) {
 	console.log("取得当前位置信息");
 	
 	MongoClient.connect(databaseConnectionURL, function(err, db) {
@@ -71,7 +71,7 @@ function getReminderRecord(response, postData) {
 }
 
 function reminderRecords(postData, db, callback) {
-	var cursor = db.collection('police_mark').find({"gps_id": targetID, "digit": 12}).sort({"bzDateTime" : 1});
+	var cursor = db.collection('police_mark').find({"gps_id": targetID}).sort({"bzDateTime" : 1});
 	cursor.each( function(err, doc) {
 		if (doc != null) {
 			warnings.push(warningParser(doc));
@@ -91,14 +91,14 @@ function warningParser(doc) {
 // 	data['time'] = doc['bzDateTime'].getTime());
 	data['time'] = doc['bzDateTime'];
 	
-	var warningType = doc['digit'];
-	var typeString = '未知错误';
-	if (warningType != null) {
-		if (warningType == 12) {
-			typeString = '震动报警';
-		}
-	}
-	data['warningDetail'] = typeString;
+// 	var warningType = doc['digit'];
+// 	var typeString = doc['info'];
+// 	if (warningType != null) {
+// 		if (warningType == 12) {
+// 			typeString = '震动报警';
+// 		}
+// 	}
+	data['warningDetail'] = doc['info'];
 	
 	return data;
 }
@@ -212,7 +212,7 @@ function fetchRecords(postData, db, trips, analyseInfo, callback) {
 //////////////////////////////////
 // 导出函数
 //////////////////////////////////
-exports.getTPositionList = getTPositionList;
+exports.getLocation = getLocation;
 exports.getReminderRecord = getReminderRecord;
 exports.getCarStatus = getCarStatus;
 exports.getTravel = getTravel;

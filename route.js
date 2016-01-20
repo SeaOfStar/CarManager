@@ -12,7 +12,7 @@ handle["/upload"] = requestHandlers.upload;
 /////////////
 // GDS服务
 /////////////
-handle["/gds/internal/getTPositionList.json"] = gds.getTPositionList;				// 即时位置
+handle["/gds/internal/getLastLocation.json"] = gds.getLocation;				// 即时位置
 handle["/gds/internal/getReminderRecord.json"] = gds.getReminderRecord;				// 提醒记录
 handle["/gds/internal/getCarStatus.json"] = gds.getCarStatus;						// 车况体检
 handle["/gds/internal/getTravel.json"] = gds.getTravel;								// 行程记录

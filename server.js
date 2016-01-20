@@ -1,5 +1,6 @@
 var http = require("http");
 var url = require("url");
+var port = 8088;
 
 function start(route) {
 	http.createServer(function(request, response) {
@@ -18,9 +19,9 @@ function start(route) {
 			route(pathname, response, postData);
 		});
 		
-	}).listen(8888);
+	}).listen(port);
 
-	console.log("服务器启动...");
+	console.log("服务器[" + port + "] 启动...");
 }
 
 exports.start = start;
