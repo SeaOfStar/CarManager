@@ -33,6 +33,7 @@ function getLocation(response, postData) {
 	MongoClient.connect(databaseConnectionURL, function(err, db) {
 		assert.equal(null, err);
 		console.log("成功连接：" + databaseConnectionURL);
+
 		
 		caredPosition(db, function() {
 			writeResponse(response, last);
